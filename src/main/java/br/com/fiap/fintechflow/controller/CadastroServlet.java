@@ -1,6 +1,6 @@
 package br.com.fiap.fintechflow.controller;
 
-import br.com.fiap.fintechflow.dao.DAOFactory;
+import br.com.fiap.fintechflow.factory.DAOFactory;
 import br.com.fiap.fintechflow.dao.UsuarioDAO;
 import br.com.fiap.fintechflow.model.Usuario;
 import br.com.fiap.fintechflow.model.Endereco;
@@ -81,7 +81,7 @@ public class CadastroServlet extends HttpServlet {
             }
             request.getRequestDispatcher("cadastro.jsp").forward(request, response);
         } finally {
-            DAOFactory.closeAll(); // Fecha a conexão
+            DAOFactory.closeAll(); // Fechar a conexão
         }
     }
 }

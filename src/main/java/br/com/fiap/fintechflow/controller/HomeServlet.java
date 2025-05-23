@@ -1,6 +1,6 @@
 package br.com.fiap.fintechflow.controller;
 
-import br.com.fiap.fintechflow.dao.DAOFactory;
+import br.com.fiap.fintechflow.factory.DAOFactory;
 import br.com.fiap.fintechflow.dao.ContaDAO;
 import br.com.fiap.fintechflow.model.Conta;
 import br.com.fiap.fintechflow.model.Usuario;

@@ -1,4 +1,6 @@
-package br.com.fiap.fintechflow.dao;
+package br.com.fiap.fintechflow.factory;
+
+import br.com.fiap.fintechflow.dao.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
