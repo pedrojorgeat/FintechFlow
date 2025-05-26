@@ -15,7 +15,6 @@ public class DAOFactory {
             connection = ConnectionManager.getConnection();
         }
         return connection;
-
     }
 
     public static UsuarioDAO getUsuarioDAO() throws SQLException {

@@ -27,25 +27,25 @@
   <form action="${pageContext.request.contextPath}/transferir" method="post">
     <div class="mb-3">
       <label for="contaDestino" class="form-label">Número da Conta de Destino:</label>
-      <input type="text" class="form-control" id="contaDestino" name="contaDestino" required placeholder="Ex: 12345-6">
+      <input type="text" class="form-control" id="contaDestino" name="contaDestino" required placeholder="Ex: 12345-6" value="${param.contaDestino}">
     </div>
     <div class="mb-3">
       <label for="valor" class="form-label">Valor a Transferir:</label>
-      <input type="number" class="form-control" id="valor" name="valor" step="0.01" min="0.01" required placeholder="Ex: 100.50">
+      <input type="number" class="form-control" id="valor" name="valor" step="0.01" min="0.01" required placeholder="Ex: 100.50" value="${param.valor}">
     </div>
     <div class="mb-4">
       <label for="descricao" class="form-label">Descrição (Opcional):</label>
-      <textarea class="form-control" id="descricao" name="descricao" rows="3" placeholder="Ex: Pagamento aluguel"></textarea>
+      <textarea class="form-control" id="descricao" name="descricao" rows="3" placeholder="Ex: Pagamento aluguel">${param.descricao}</textarea>
     </div>
 
-    <div class="d-grid">
-      <button type="submit" class="btn btn-custom btn-lg">Confirmar Transferência</button>
+    <div class="d-grid gap-2">
+      <button type="submit" class="btn btn-custom btn-lg">Transferir</button>
     </div>
   </form>
 
   <div class="text-center mt-4">
-    <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-secondary">Voltar para o Dashboard</a>
+    <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-primary">Voltar para Home</a>
   </div>
 </div>
 
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp" />

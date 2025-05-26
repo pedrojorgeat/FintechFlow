@@ -1,10 +1,10 @@
 package br.com.fiap.fintechflow.controller;
 
-import br.com.fiap.fintechflow.factory.DAOFactory;
-import br.com.fiap.fintechflow.dao.UsuarioDAO;
+import br.com.fiap.fintechflow.exception.BusinessException;
 import br.com.fiap.fintechflow.model.Usuario;
+import br.com.fiap.fintechflow.service.UsuarioService;
+import br.com.fiap.fintechflow.service.impl.UsuarioServiceImpl;
 
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,46 +19,46 @@ import java.sql.SQLException;
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
+    private UsuarioService usuarioService;
 
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            this.usuarioService = new UsuarioServiceImpl();
+        } catch (SQLException e) {
+            throw new ServletException("Erro ao inicializar UsuarioService: " + e.getMessage(), e);
+        }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
-        String senha = request.getParameter("senha"); // Em um sistema real, use hash da senha
+        String senha = request.getParameter("senha"); // Lembre-se: em um sistema real, HASH a senha antes de salvar e compare com o hash armazenado!
 
-        UsuarioDAO usuarioDAO = null;
         try {
-            usuarioDAO = DAOFactory.getUsuarioDAO();
-            Usuario usuarioLogado = usuarioDAO.autenticar(login, senha);
+            Usuario usuarioLogado = usuarioService.autenticar(login, senha);
 
-            if (usuarioLogado != null) {
-                // Autenticação bem-sucedida
-                HttpSession session = request.getSession();
-                session.setAttribute("usuarioLogado", usuarioLogado); // Armazena o usuário na sessão
+            // Autenticação bem-sucedida
+            HttpSession session = request.getSession();
+            session.setAttribute("usuarioLogado", usuarioLogado); // Armazena o usuário na sessão
 
-                // Redireciona para a página principal (HomeServlet)
-                response.sendRedirect(request.getContextPath() + "/home");
-            } else {
-                // Autenticação falhou
-                request.setAttribute("mensagemErro", "Login ou senha inválidos.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            }
+            // Redireciona para a página principal (HomeServlet)
+            response.sendRedirect(request.getContextPath() + "/home");
+        } catch (BusinessException e) {
+            // Autenticação falhou por regra de negócio (login/senha inválidos)
+            request.setAttribute("mensagemErro", e.getMessage());
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } catch (SQLException e) {
+            // Erro de acesso ao banco de dados
             e.printStackTrace(); // Log do erro no console do servidor
             request.setAttribute("mensagemErro", "Erro ao conectar ao banco de dados: " + e.getMessage());
             request.getRequestDispatcher("login.jsp").forward(request, response);
-        } finally {
-            DAOFactory.closeAll(); // Fecha a conexão do DAOFactory
         }
     }
-
 }

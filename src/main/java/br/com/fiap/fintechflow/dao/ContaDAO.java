@@ -11,7 +11,7 @@ public class ContaDAO {
 
     private Connection connection;
 
-    public ContaDAO(Connection connection) { // Construtor agora recebe a conexão
+    public ContaDAO(Connection connection) {
         this.connection = connection;
     }
 
@@ -54,6 +54,24 @@ public class ContaDAO {
                     return new Conta(rs.getInt("ID"),
                             rs.getInt("ID_USUARIO"),
                             numeroConta,
+                            rs.getString("AGENCIA"),
+                            rs.getDouble("SALDO"),
+                            rs.getTimestamp("DATA_CRIACAO").toLocalDateTime());
+                }
+            }
+        }
+        return null;
+    }
+
+    public Conta buscarContaPorId(int idConta) throws SQLException {
+        String sql = "SELECT ID, ID_USUARIO, NUMERO_CONTA, AGENCIA, SALDO, DATA_CRIACAO FROM TB_CONTAS WHERE ID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idConta);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Conta(rs.getInt("ID"),
+                            rs.getInt("ID_USUARIO"),
+                            rs.getString("NUMERO_CONTA"),
                             rs.getString("AGENCIA"),
                             rs.getDouble("SALDO"),
                             rs.getTimestamp("DATA_CRIACAO").toLocalDateTime());

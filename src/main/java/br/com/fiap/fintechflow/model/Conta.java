@@ -72,16 +72,4 @@ public class Conta {
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
-
-    @Override
-    public String toString() {
-        return "Conta{" +
-                "id=" + id +
-                ", idUsuario=" + idUsuario +
-                ", numeroConta='" + numeroConta + '\'' +
-                ", agencia='" + agencia + '\'' +
-                ", saldo=" + saldo +
-                ", dataCriacao=" + dataCriacao +
-                '}';
-    }
 }

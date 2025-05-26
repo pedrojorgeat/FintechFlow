@@ -33,8 +33,8 @@
             <th>Tipo</th>
             <th>Descrição</th>
             <th>Valor</th>
-            <th>De (ID Conta)</th>
-            <th>Para (ID Conta)</th>
+            <th>De (ID Conta Origem)</th>
+            <th>Para (ID Conta Destino)</th>
           </tr>
           </thead>
           <tbody>
@@ -69,8 +69,8 @@
   </c:choose>
 
   <div class="text-center mt-4">
-    <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-secondary">Voltar para o Dashboard</a>
+    <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-primary">Voltar para Home</a>
   </div>
 </div>
 
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp" />
