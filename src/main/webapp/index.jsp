@@ -28,5 +28,4 @@
   </c:if>
 </div>
 
-<%-- Inclui o rodapé --%>
-<%@include file="footer.jsp" %>
+<jsp:include page="footer.jsp" />

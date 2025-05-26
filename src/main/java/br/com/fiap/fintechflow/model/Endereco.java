@@ -52,7 +52,7 @@ public class Endereco {
     }
 
     public void setLogradouro(String logradouro) {
-        this.logradouro = logradouro;
+        this.logradouro = log(logradouro);
     }
 
     public String getNumero() {
@@ -103,38 +103,8 @@ public class Endereco {
         this.cep = cep;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Endereco endereco = (Endereco) o;
-        // A unicidade do endereço é definida pela combinação de seus campos
-        // Usar Objects.equals para lidar corretamente com valores null para complemento
-        return Objects.equals(logradouro, endereco.logradouro) &&
-                Objects.equals(numero, endereco.numero) &&
-                Objects.equals(complemento, endereco.complemento) &&
-                Objects.equals(bairro, endereco.bairro) &&
-                Objects.equals(cidade, endereco.cidade) &&
-                Objects.equals(estado, endereco.estado) &&
-                Objects.equals(cep, endereco.cep);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(logradouro, numero, complemento, bairro, cidade, estado, cep);
-    }
-
-    @Override
-    public String toString() {
-        return "Endereco{" +
-                "id=" + id +
-                ", logradouro='" + logradouro + '\'' +
-                ", numero='" + numero + '\'' +
-                ", complemento='" + complemento + '\'' +
-                ", bairro='" + bairro + '\'' +
-                ", cidade='" + cidade + '\'' +
-                ", estado='" + estado + '\'' +
-                ", cep='" + cep + '\'' +
-                '}';
+    private String log(String str) {
+        System.out.println("Log: " + str);
+        return str;
     }
 }

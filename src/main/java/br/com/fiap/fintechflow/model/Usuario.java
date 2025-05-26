@@ -1,38 +1,25 @@
 package br.com.fiap.fintechflow.model;
 
 public class Usuario {
-    private int id; // Corresponde à coluna ID em TB_USUARIOS
-    private String login; // Corresponde à coluna LOGIN
-    private String senha; // Corresponde à coluna SENHA (Lembre-se do HASH!)
-    private String nome; // Corresponde à coluna NOME
-    private String email; // Corresponde à coluna EMAIL
-    private Integer idEndereco; // FK para TB_ENDERECOS, pode ser NULL
-    private Endereco endereco; // Objeto Endereco associado, para facilidade de uso na camada de aplicação
+    private int id;
+    private String login;
+    private String senha;
+    private String nome;
+    private String email;
+    private Endereco endereco; // Associação com Endereco
+    private Conta conta; // Associação com Conta (cada usuário tem uma conta)
 
-    // Construtor padrão
     public Usuario() {
     }
 
-    // Construtor para leitura do banco de dados (pode carregar o idEndereco e depois o objeto Endereco)
-    public Usuario(int id, String login, String senha, String nome, String email, Integer idEndereco) {
+    public Usuario(int id, String login, String senha, String nome, String email, Endereco endereco) {
         this.id = id;
         this.login = login;
         this.senha = senha;
         this.nome = nome;
         this.email = email;
-        this.idEndereco = idEndereco;
-        // O objeto Endereco será populado via DAO (UsuarioDAO.autenticar ou outro método de busca)
+        this.endereco = endereco;
     }
-
-    // Construtor para criação/cadastro de um novo usuário com endereço
-    public Usuario(String login, String senha, String nome, String email, Endereco endereco) {
-        this.login = login;
-        this.senha = senha;
-        this.nome = nome;
-        this.email = email;
-        this.setEndereco(endereco); // Usa o setter para garantir que idEndereco também seja setado
-    }
-
 
     // Getters e Setters
     public int getId() {
@@ -75,40 +62,19 @@ public class Usuario {
         this.email = email;
     }
 
-    // Getter e Setter para o ID da chave estrangeira do Endereço
-    public Integer getIdEndereco() {
-        return idEndereco;
-    }
-
-    public void setIdEndereco(Integer idEndereco) {
-        this.idEndereco = idEndereco;
-    }
-
-    // Getter e Setter para o objeto Endereco completo
     public Endereco getEndereco() {
         return endereco;
     }
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
-        // Se o objeto Endereco for setado, também atualiza o idEndereco
-        if (endereco != null) {
-            this.idEndereco = endereco.getId();
-        } else {
-            this.idEndereco = null;
-        }
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", senha='[PROTECTED]'" + // Não exibir senha em logs!
-                ", nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", idEndereco=" + idEndereco +
-                ", endereco=" + (endereco != null ? endereco.getLogradouro() + ", " + endereco.getNumero() : "null") +
-                '}';
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
     }
 }

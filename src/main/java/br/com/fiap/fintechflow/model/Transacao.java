@@ -1,21 +1,19 @@
 package br.com.fiap.fintechflow.model;
 
-import java.time.LocalDateTime; // Importado para LocalDateTime
+import java.time.LocalDateTime;
 
 public class Transacao {
-    private int id; // Corresponde à coluna ID em TB_TRANSACOES
-    private Integer idContaOrigem; // FK para TB_CONTAS, pode ser NULL para depósitos/saques
-    private Integer idContaDestino; // FK para TB_CONTAS, pode ser NULL para saques
-    private String tipo; // Corresponde à coluna TIPO (ex: "DEPOSITO", "SAQUE", "TRANSFERENCIA")
-    private double valor; // Corresponde à coluna VALOR
-    private LocalDateTime dataHora; // Corresponde à coluna DATA_HORA (TIMESTAMP)
-    private String descricao; // Corresponde à coluna DESCRICAO
+    private int id;
+    private Integer idContaOrigem; // Pode ser null para depósito, por exemplo
+    private Integer idContaDestino; // Pode ser null para saque, por exemplo
+    private String tipo; // Ex: "Depósito", "Saque", "Transferência", "Recebimento de Transferência"
+    private double valor;
+    private LocalDateTime dataHora;
+    private String descricao;
 
-    // Construtor padrão
     public Transacao() {
     }
 
-    // Construtor completo
     public Transacao(int id, Integer idContaOrigem, Integer idContaDestino, String tipo, double valor, LocalDateTime dataHora, String descricao) {
         this.id = id;
         this.idContaOrigem = idContaOrigem;
@@ -24,6 +22,11 @@ public class Transacao {
         this.valor = valor;
         this.dataHora = dataHora;
         this.descricao = descricao;
+    }
+
+    // Construtor sem ID para inserção
+    public Transacao(Integer idContaOrigem, Integer idContaDestino, String tipo, double valor, LocalDateTime dataHora, String descricao) {
+        this(0, idContaOrigem, idContaDestino, tipo, valor, dataHora, descricao);
     }
 
     // Getters e Setters
@@ -81,18 +84,5 @@ public class Transacao {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    @Override
-    public String toString() {
-        return "Transacao{" +
-                "id=" + id +
-                ", idContaOrigem=" + idContaOrigem +
-                ", idContaDestino=" + idContaDestino +
-                ", tipo='" + tipo + '\'' +
-                ", valor=" + valor +
-                ", dataHora=" + dataHora +
-                ", descricao='" + descricao + '\'' +
-                '}';
     }
 }

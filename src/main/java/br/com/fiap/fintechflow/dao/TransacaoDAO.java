@@ -13,7 +13,7 @@ public class TransacaoDAO {
 
     private Connection connection;
 
-    public TransacaoDAO(Connection connection) { // Construtor agora recebe a conexão
+    public TransacaoDAO(Connection connection) {
         this.connection = connection;
     }
 
@@ -32,6 +32,7 @@ public class TransacaoDAO {
 
     public List<Transacao> buscarTransacoesPorConta(int idConta) throws SQLException {
         List<Transacao> transacoes = new ArrayList<>();
+        // Busca transações onde a conta é origem OU destino
         String sql = "SELECT ID, ID_CONTA_ORIGEM, ID_CONTA_DESTINO, TIPO, VALOR, DATA_HORA, DESCRICAO FROM TB_TRANSACOES WHERE ID_CONTA_ORIGEM = ? OR ID_CONTA_DESTINO = ? ORDER BY DATA_HORA DESC";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, idConta);
@@ -40,6 +41,7 @@ public class TransacaoDAO {
                 while (rs.next()) {
                     Transacao transacao = new Transacao(
                             rs.getInt("ID"),
+                            // Usar rs.getObject(column, Class) para lidar com colunas que podem ser NULL (Integer)
                             rs.getObject("ID_CONTA_ORIGEM", Integer.class),
                             rs.getObject("ID_CONTA_DESTINO", Integer.class),
                             rs.getString("TIPO"),

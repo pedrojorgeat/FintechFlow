@@ -11,7 +11,7 @@ public class EnderecoDAO {
 
     private Connection connection;
 
-    public EnderecoDAO(Connection connection) { // Construtor agora recebe a conexão
+    public EnderecoDAO(Connection connection) {
         this.connection = connection;
     }
 
@@ -34,83 +34,41 @@ public class EnderecoDAO {
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
                     idGerado = rs.getInt(1);
-                    endereco.setId(idGerado);
+                    endereco.setId(idGerado); // Define o ID gerado no objeto Endereco
                 }
             }
-            System.out.println("Endereço cadastrado com sucesso. ID: " + idGerado);
         } catch (SQLException e) {
-            System.err.println("Erro ao cadastrar endereço: " + e.getMessage());
+            System.err.println("Erro ao inserir endereço: " + e.getMessage());
             throw e;
         }
         return idGerado;
     }
 
-    public Endereco buscarPorId(int id) throws SQLException {
-        Endereco endereco = null;
-        String sql = "SELECT ID, LOGRADOURO, NUMERO, COMPLEMENTO, BAIRRO, CIDADE, ESTADO, CEP " +
-                "FROM TB_ENDERECOS WHERE ID = ?";
-
+    public Endereco buscarPorId(int idEndereco) throws SQLException {
+        String sql = "SELECT ID, LOGRADOURO, NUMERO, COMPLEMENTO, BAIRRO, CIDADE, ESTADO, CEP FROM TB_ENDERECOS WHERE ID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            stmt.setInt(1, idEndereco);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    endereco = new Endereco(
-                            rs.getInt("ID"),
+                    return new Endereco(rs.getInt("ID"),
                             rs.getString("LOGRADOURO"),
                             rs.getString("NUMERO"),
                             rs.getString("COMPLEMENTO"),
                             rs.getString("BAIRRO"),
                             rs.getString("CIDADE"),
                             rs.getString("ESTADO"),
-                            rs.getString("CEP")
-                    );
+                            rs.getString("CEP"));
                 }
             }
         } catch (SQLException e) {
             System.err.println("Erro ao buscar endereço por ID: " + e.getMessage());
             throw e;
         }
-        return endereco;
-    }
-
-    public Endereco buscarPorEndereco(Endereco endereco) throws SQLException {
-        Endereco enderecoExistente = null;
-        String sql = "SELECT ID FROM TB_ENDERECOS WHERE LOGRADOURO = ? AND NUMERO = ? AND " +
-                "NVL(COMPLEMENTO, 'NULL_COMPLEMENTO') = NVL(?, 'NULL_COMPLEMENTO') AND " +
-                "BAIRRO = ? AND CIDADE = ? AND ESTADO = ? AND CEP = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, endereco.getLogradouro());
-            stmt.setString(2, endereco.getNumero());
-            stmt.setString(3, endereco.getComplemento());
-            stmt.setString(4, endereco.getBairro());
-            stmt.setString(5, endereco.getCidade());
-            stmt.setString(6, endereco.getEstado());
-            stmt.setString(7, endereco.getCep());
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    enderecoExistente = new Endereco();
-                    enderecoExistente.setId(rs.getInt("ID"));
-                    enderecoExistente.setLogradouro(endereco.getLogradouro());
-                    enderecoExistente.setNumero(endereco.getNumero());
-                    enderecoExistente.setComplemento(endereco.getComplemento());
-                    enderecoExistente.setBairro(endereco.getBairro());
-                    enderecoExistente.setCidade(endereco.getCidade());
-                    enderecoExistente.setEstado(endereco.getEstado());
-                    enderecoExistente.setCep(endereco.getCep());
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao buscar endereço por campos: " + e.getMessage());
-            throw e;
-        }
-        return enderecoExistente;
+        return null;
     }
 
     public void atualizar(Endereco endereco) throws SQLException {
-        String sql = "UPDATE TB_ENDERECOS SET LOGRADOURO = ?, NUMERO = ?, COMPLEMENTO = ?, BAIRRO = ?, CIDADE = ?, ESTADO = ?, CEP = ? " +
-                "WHERE ID = ?";
+        String sql = "UPDATE TB_ENDERECOS SET LOGRADOURO = ?, NUMERO = ?, COMPLEMENTO = ?, BAIRRO = ?, CIDADE = ?, ESTADO = ?, CEP = ? WHERE ID = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, endereco.getLogradouro());
